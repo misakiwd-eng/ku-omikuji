@@ -546,23 +546,17 @@ async function drawFortune(){
         void fortune.offsetWidth;
         fortune.classList.add("fade");
 
-    }catch(err){
+    }}catch(err){
 
-        console.error(err);
+    console.error(err);
 
-        loading.classList.add("hidden");
+    alert(err.message);
 
-        home.classList.remove("hidden");
+    loading.classList.add("hidden");
 
-        home.classList.remove("fade");
-        void home.offsetWidth;
-        home.classList.add("fade");
+    home.classList.remove("hidden");
 
-        alert(
-            "読み込みに失敗しました。\n\n" +
-            "インターネット接続をご確認のうえ、もう一度お試しください。"
-        );
-
+}
     }
 
 }
