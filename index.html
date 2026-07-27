@@ -25,12 +25,12 @@ rel="stylesheet">
 <style>
 
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
 body{
-
-    margin:0;
 
     min-height:100vh;
 
@@ -42,14 +42,14 @@ body{
 
     background:#F8F6F2;
 
-    padding:24px;
-
     font-family:
-        "Inter",
-        "Noto Sans JP",
-        sans-serif;
+    "Inter",
+    "Noto Sans JP",
+    sans-serif;
 
     color:#333;
+
+    padding:24px;
 
 }
 
@@ -59,12 +59,12 @@ body{
 
     background:white;
 
-    border-radius:24px;
+    border-radius:26px;
 
-    padding:36px 28px;
+    padding:38px 30px;
 
     box-shadow:
-        0 12px 40px rgba(0,0,0,.08);
+    0 12px 40px rgba(0,0,0,.08);
 
 }
 
@@ -106,9 +106,57 @@ to{
 
 }
 
+h1{
+
+    font-size:54px;
+
+    margin-bottom:12px;
+
+}
+
+h2{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+}
+
+h3{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    margin-bottom:12px;
+
+}
+
+.small{
+
+    color:#777;
+
+    font-size:.9rem;
+
+}
+
+.section{
+
+    margin-top:26px;
+
+    padding-top:20px;
+
+    border-top:1px solid #ECECEC;
+
+}
+
 button{
 
     width:100%;
+
+    margin-top:28px;
 
     padding:16px;
 
@@ -125,8 +173,8 @@ button{
     cursor:pointer;
 
     transition:
-        transform .2s,
-        box-shadow .2s;
+    transform .2s,
+    box-shadow .2s;
 
 }
 
@@ -135,8 +183,8 @@ button:hover{
     transform:translateY(-2px);
 
     box-shadow:
-        0 8px 20px
-        rgba(74,111,165,.25);
+    0 8px 20px
+    rgba(74,111,165,.25);
 
 }
 
@@ -156,31 +204,13 @@ button:active{
 
 }
 
-.small{
-
-    color:#777;
-
-    font-size:.9rem;
-
-}
-
-.section{
-
-    margin-top:24px;
-
-    padding-top:18px;
-
-    border-top:1px solid #ECECEC;
-
-}
-
 .loading{
 
     text-align:center;
 
-    padding:32px 0;
-
     color:#666;
+
+    padding:40px 0;
 
 }
 
@@ -188,7 +218,7 @@ button:active{
 
     display:block;
 
-    margin-top:24px;
+    margin-top:28px;
 
     text-align:center;
 
@@ -212,6 +242,17 @@ button:active{
 
 }
 
+    /* Safariでも文字サイズが勝手に変わらないように */
+    html{
+        -webkit-text-size-adjust:100%;
+    }
+
+    /* iPhoneの青いタップハイライトを消す */
+    button,
+    a{
+        -webkit-tap-highlight-color:transparent;
+    }
+
 </style>
 
 </head>
@@ -229,7 +270,9 @@ button:active{
         <h1>🍀</h1>
 
         <h2>
+
             Ku's Good Luck Charm
+
         </h2>
 
         <p class="small">
@@ -238,7 +281,8 @@ button:active{
 
         </p>
 
-        <button onclick="drawFortune()">
+        <button
+            onclick="drawFortune()">
 
             Open Your Fortune
 
@@ -276,7 +320,6 @@ button:active{
 
         <h2 id="greeting"></h2>
 
-
         <div class="section">
 
             <h3>
@@ -297,7 +340,6 @@ button:active{
 
         </div>
 
-
         <div class="section">
 
             <h3 id="bonusTitle"></h3>
@@ -305,7 +347,6 @@ button:active{
             <p id="bonusText"></p>
 
         </div>
-
 
         <div class="section center">
 
@@ -332,6 +373,7 @@ button:active{
         </div>
 
     </div>
+
         <!-- Letter -->
 
     <div
@@ -429,46 +471,102 @@ function translate(title){
 async function drawFortune(){
 
     home.classList.add("hidden");
+
     loading.classList.remove("hidden");
 
-    const response = await fetch(
-        API_URL + "?t=" + Date.now(),
-        {
-            method: "GET",
-            cache: "no-store",
-            redirect: "follow"
+    try{
+
+        const response = await fetch(
+
+            API_URL + "?t=" + Date.now(),
+
+            {
+                method:"GET",
+                cache:"no-store"
+            }
+
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
         }
-    );
 
-    const data = await response.json();
+        const data = await response.json();
 
-    currentFortune =
-        data[Math.floor(Math.random() * data.length)];
+        currentFortune =
+            data[
+                Math.floor(
+                    Math.random()*data.length
+                )
+            ];
 
-    loading.classList.add("hidden");
+        await new Promise(resolve =>
+            setTimeout(resolve,200)
+        );
 
-    greeting.textContent =
-        greetings[
-            Math.floor(Math.random() * greetings.length)
-        ];
+        loading.classList.add("hidden");
 
-    fortuneText.textContent =
-        currentFortune.fortune;
+        greeting.textContent =
+            greetings[
+                Math.floor(
+                    Math.random()*greetings.length
+                )
+            ];
 
-    bonusTitle.innerHTML =
-        currentFortune.bonusTitle +
-        "<br><span class='small'>" +
-        translate(currentFortune.bonusTitle) +
-        "</span>";
+        fortuneText.textContent =
+            currentFortune.fortune;
 
-    bonusText.textContent =
-        currentFortune.bonusText;
+        bonusTitle.innerHTML =
 
-    fortune.classList.remove("hidden");
-    fortune.classList.remove("fade");
-    void fortune.offsetWidth;
-    fortune.classList.add("fade");
+            currentFortune.bonusTitle +
+
+            "<br><span class='small'>" +
+
+            translate(currentFortune.bonusTitle) +
+
+            "</span>";
+
+        bonusText.textContent =
+            currentFortune.bonusText;
+
+        fortune.classList.remove("hidden");
+
+        fortune.classList.remove("fade");
+
+        void fortune.offsetWidth;
+
+        fortune.classList.add("fade");
+
+        // 毎回フェードイン
+        fortune.classList.remove("fade");
+        void fortune.offsetWidth;
+        fortune.classList.add("fade");
+
+    }catch(err){
+
+        console.error(err);
+
+        loading.classList.add("hidden");
+
+        home.classList.remove("hidden");
+
+        home.classList.remove("fade");
+        void home.offsetWidth;
+        home.classList.add("fade");
+
+        alert(
+            "読み込みに失敗しました。\n\n" +
+            "インターネット接続をご確認のうえ、もう一度お試しください。"
+        );
+
+    }
+
 }
+
 function showLetter(){
 
     fortune.classList.add("hidden");
@@ -481,13 +579,11 @@ function showLetter(){
 
     letter.classList.remove("hidden");
 
-    // 毎回フェードイン
     letter.classList.remove("fade");
     void letter.offsetWidth;
     letter.classList.add("fade");
 
 }
-
 function goHome(){
 
     letter.classList.add("hidden");
@@ -498,12 +594,39 @@ function goHome(){
 
     home.classList.remove("hidden");
 
-    // 毎回フェードイン
     home.classList.remove("fade");
     void home.offsetWidth;
     home.classList.add("fade");
 
 }
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Escape"){
+
+        goHome();
+
+    }
+
+});
+
+// iPhone Safari対策
+window.addEventListener("pageshow",()=>{
+
+    loading.classList.add("hidden");
+
+    if(
+        home.classList.contains("hidden") &&
+        fortune.classList.contains("hidden") &&
+        letter.classList.contains("hidden")
+    ){
+
+        home.classList.remove("hidden");
+
+    }
+
+});
+
 </script>
 
 </body>
