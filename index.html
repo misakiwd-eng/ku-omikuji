@@ -471,38 +471,26 @@ function translate(title){
 async function drawFortune(){
 
     home.classList.add("hidden");
-
     loading.classList.remove("hidden");
 
     try{
 
         const response = await fetch(
-
             API_URL + "?t=" + Date.now(),
-
             {
-                method:"GET",
-                cache:"no-store"
+                method: "GET",
+                cache: "no-store"
             }
-
         );
 
         if(!response.ok){
-
-            throw new Error(
-                "HTTP " + response.status
-            );
-
+            throw new Error("HTTP " + response.status);
         }
 
         const data = await response.json();
 
         currentFortune =
-            data[
-                Math.floor(
-                    Math.random()*data.length
-                )
-            ];
+            data[Math.floor(Math.random()*data.length)];
 
         await new Promise(resolve =>
             setTimeout(resolve,200)
@@ -511,42 +499,38 @@ async function drawFortune(){
         loading.classList.add("hidden");
 
         greeting.textContent =
-            greetings[
-                Math.floor(
-                    Math.random()*greetings.length
-                )
-            ];
+            greetings[Math.floor(Math.random()*greetings.length)];
 
         fortuneText.textContent =
             currentFortune.fortune;
 
         bonusTitle.innerHTML =
-
             currentFortune.bonusTitle +
-
             "<br><span class='small'>" +
-
             translate(currentFortune.bonusTitle) +
-
             "</span>";
 
         bonusText.textContent =
             currentFortune.bonusText;
 
         fortune.classList.remove("hidden");
-
-        fortune.classList.remove("fade");
-
-        void fortune.offsetWidth;
-
-        fortune.classList.add("fade");
-
-        // 毎回フェードイン
         fortune.classList.remove("fade");
         void fortune.offsetWidth;
         fortune.classList.add("fade");
 
-    }}catch(err){
+    }catch(err){
+
+        console.error(err);
+
+        loading.classList.add("hidden");
+        home.classList.remove("hidden");
+
+        alert("読み込みに失敗しました。\n\n" + err.message);
+
+    }
+
+}
+    catch(err){
 
     console.error(err);
 
