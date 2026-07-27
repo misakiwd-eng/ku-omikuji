@@ -30,6 +30,10 @@ rel="stylesheet">
     box-sizing:border-box;
 }
 
+html{
+    -webkit-text-size-adjust:100%;
+}
+
 body{
 
     min-height:100vh;
@@ -42,6 +46,8 @@ body{
 
     background:#F8F6F2;
 
+    padding:24px;
+
     font-family:
     "Inter",
     "Noto Sans JP",
@@ -49,22 +55,20 @@ body{
 
     color:#333;
 
-    padding:24px;
-
 }
 
 .card{
 
     width:min(100%,430px);
 
-    background:white;
+    background:#fff;
 
     border-radius:26px;
 
     padding:38px 30px;
 
     box-shadow:
-    0 12px 40px rgba(0,0,0,.08);
+        0 12px 40px rgba(0,0,0,.08);
 
 }
 
@@ -82,7 +86,7 @@ body{
 
 .fade{
 
-    animation:fade .4s ease;
+    animation:fade .35s ease;
 
 }
 
@@ -92,7 +96,7 @@ from{
 
     opacity:0;
 
-    transform:translateY(15px);
+    transform:translateY(14px);
 
 }
 
@@ -118,9 +122,9 @@ h2{
 
     font-size:28px;
 
-    margin-bottom:10px;
-
     font-weight:700;
+
+    margin-bottom:10px;
 
 }
 
@@ -166,15 +170,15 @@ button{
 
     background:#4A6FA5;
 
-    color:white;
+    color:#fff;
 
     font-size:17px;
 
     cursor:pointer;
 
-    transition:
-    transform .2s,
-    box-shadow .2s;
+    transition:.2s;
+
+    -webkit-tap-highlight-color:transparent;
 
 }
 
@@ -183,8 +187,7 @@ button:hover{
     transform:translateY(-2px);
 
     box-shadow:
-    0 8px 20px
-    rgba(74,111,165,.25);
+        0 8px 20px rgba(74,111,165,.25);
 
 }
 
@@ -196,7 +199,7 @@ button:active{
 
 #letterButton{
 
-    background:white;
+    background:#fff;
 
     color:#4A6FA5;
 
@@ -242,17 +245,6 @@ button:active{
 
 }
 
-    /* Safariでも文字サイズが勝手に変わらないように */
-    html{
-        -webkit-text-size-adjust:100%;
-    }
-
-    /* iPhoneの青いタップハイライトを消す */
-    button,
-    a{
-        -webkit-tap-highlight-color:transparent;
-    }
-
 </style>
 
 </head>
@@ -260,7 +252,6 @@ button:active{
 <body>
 
 <div class="card">
-
     <!-- Home -->
 
     <div
@@ -270,15 +261,11 @@ button:active{
         <h1>🍀</h1>
 
         <h2>
-
             Ku's Good Luck Charm
-
         </h2>
 
         <p class="small">
-
             A little surprise for today.
-
         </p>
 
         <button
@@ -289,8 +276,6 @@ button:active{
         </button>
 
     </div>
-
-
 
     <!-- Loading -->
 
@@ -310,8 +295,6 @@ button:active{
 
     </div>
 
-
-
     <!-- Fortune -->
 
     <div
@@ -329,9 +312,7 @@ button:active{
                 <br>
 
                 <span class="small">
-
                     今日の運勢
-
                 </span>
 
             </h3>
@@ -373,7 +354,6 @@ button:active{
         </div>
 
     </div>
-
         <!-- Letter -->
 
     <div
@@ -467,8 +447,16 @@ function translate(title){
     }
 
 }
-
 async function drawFortune(){
+
+    const home = document.getElementById("home");
+    const loading = document.getElementById("loading");
+    const fortune = document.getElementById("fortune");
+
+    const greeting = document.getElementById("greeting");
+    const fortuneText = document.getElementById("fortuneText");
+    const bonusTitle = document.getElementById("bonusTitle");
+    const bonusText = document.getElementById("bonusText");
 
     home.classList.add("hidden");
     loading.classList.remove("hidden");
@@ -489,20 +477,24 @@ async function drawFortune(){
 
         const data = await response.json();
 
+        if(!Array.isArray(data) || data.length === 0){
+            throw new Error("No data found.");
+        }
+
         currentFortune =
-            data[Math.floor(Math.random()*data.length)];
+            data[Math.floor(Math.random() * data.length)];
 
         await new Promise(resolve =>
-            setTimeout(resolve,200)
+            setTimeout(resolve, 300)
         );
 
         loading.classList.add("hidden");
 
         greeting.textContent =
-            greetings[Math.floor(Math.random()*greetings.length)];
+            greetings[Math.floor(Math.random() * greetings.length)];
 
         fortuneText.textContent =
-            currentFortune.fortune;
+            currentFortune.fortune || "";
 
         bonusTitle.innerHTML =
             currentFortune.bonusTitle +
@@ -511,7 +503,7 @@ async function drawFortune(){
             "</span>";
 
         bonusText.textContent =
-            currentFortune.bonusText;
+            currentFortune.bonusText || "";
 
         fortune.classList.remove("hidden");
         fortune.classList.remove("fade");
@@ -525,39 +517,47 @@ async function drawFortune(){
         loading.classList.add("hidden");
         home.classList.remove("hidden");
 
-        alert("読み込みに失敗しました。\n\n" + err.message);
+        alert(
+            "読み込みに失敗しました。\n\n" +
+            err.message
+        );
 
     }
 
 }
-
 function showLetter(){
+
+    const fortune = document.getElementById("fortune");
+    const letter = document.getElementById("letter");
+    const letterText = document.getElementById("letterText");
+    const sender = document.getElementById("sender");
 
     fortune.classList.add("hidden");
 
     letterText.textContent =
-        currentFortune.letter;
+        currentFortune.letter || "";
 
     sender.textContent =
-        "— " + currentFortune.name;
+        currentFortune.name
+        ? "— " + currentFortune.name
+        : "";
 
     letter.classList.remove("hidden");
-
     letter.classList.remove("fade");
     void letter.offsetWidth;
     letter.classList.add("fade");
 
 }
+
 function goHome(){
 
-    letter.classList.add("hidden");
+    document.getElementById("letter").classList.add("hidden");
+    document.getElementById("fortune").classList.add("hidden");
+    document.getElementById("loading").classList.add("hidden");
 
-    fortune.classList.add("hidden");
-
-    loading.classList.add("hidden");
+    const home = document.getElementById("home");
 
     home.classList.remove("hidden");
-
     home.classList.remove("fade");
     void home.offsetWidth;
     home.classList.add("fade");
@@ -567,26 +567,21 @@ function goHome(){
 document.addEventListener("keydown",(e)=>{
 
     if(e.key==="Escape"){
-
         goHome();
-
     }
 
 });
 
-// iPhone Safari対策
 window.addEventListener("pageshow",()=>{
 
-    loading.classList.add("hidden");
+    document.getElementById("loading").classList.add("hidden");
 
     if(
-        home.classList.contains("hidden") &&
-        fortune.classList.contains("hidden") &&
-        letter.classList.contains("hidden")
+        document.getElementById("home").classList.contains("hidden") &&
+        document.getElementById("fortune").classList.contains("hidden") &&
+        document.getElementById("letter").classList.contains("hidden")
     ){
-
-        home.classList.remove("hidden");
-
+        document.getElementById("home").classList.remove("hidden");
     }
 
 });
