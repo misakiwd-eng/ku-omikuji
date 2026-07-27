@@ -5,8 +5,9 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
 <title>Ku's Good Luck Charm</title>
 
@@ -17,7 +18,8 @@ href="https://fonts.googleapis.com">
 href="https://fonts.gstatic.com"
 crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
 rel="stylesheet">
 
 <style>
@@ -40,14 +42,14 @@ body{
 
     background:#F8F6F2;
 
+    padding:24px;
+
     font-family:
         "Inter",
         "Noto Sans JP",
         sans-serif;
 
     color:#333;
-
-    padding:24px;
 
 }
 
@@ -62,7 +64,7 @@ body{
     padding:36px 28px;
 
     box-shadow:
-    0 12px 40px rgba(0,0,0,.08);
+        0 12px 40px rgba(0,0,0,.08);
 
 }
 
@@ -80,7 +82,7 @@ body{
 
 .fade{
 
-    animation:fade .35s ease;
+    animation:fade .4s ease;
 
 }
 
@@ -122,13 +124,19 @@ button{
 
     cursor:pointer;
 
-    transition:.2s;
+    transition:
+        transform .2s,
+        box-shadow .2s;
 
 }
 
 button:hover{
 
     transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(74,111,165,.25);
 
 }
 
@@ -194,6 +202,8 @@ button:active{
 
 }
 
+#fortuneText,
+#bonusText,
 #letterText{
 
     white-space:pre-wrap;
@@ -212,26 +222,37 @@ button:active{
 
     <!-- Home -->
 
-    <div id="home" class="center fade">
+    <div
+        id="home"
+        class="center fade">
 
         <h1>🍀</h1>
 
-        <h2>Ku's Good Luck Charm</h2>
+        <h2>
+            Ku's Good Luck Charm
+        </h2>
 
         <p class="small">
+
             A little surprise for today.
+
         </p>
 
         <button onclick="drawFortune()">
+
             Open Your Fortune
+
         </button>
 
     </div>
 
 
+
     <!-- Loading -->
 
-    <div id="loading" class="hidden loading">
+    <div
+        id="loading"
+        class="hidden loading">
 
         ✨
 
@@ -246,9 +267,12 @@ button:active{
     </div>
 
 
+
     <!-- Fortune -->
 
-    <div id="fortune" class="hidden fade">
+    <div
+        id="fortune"
+        class="hidden">
 
         <h2 id="greeting"></h2>
 
@@ -308,10 +332,11 @@ button:active{
         </div>
 
     </div>
-
         <!-- Letter -->
 
-    <div id="letter" class="hidden fade">
+    <div
+        id="letter"
+        class="hidden">
 
         <h2>
 
@@ -414,10 +439,19 @@ async function drawFortune(){
     currentFortune =
         data[Math.floor(Math.random()*data.length)];
 
+    // 0.5秒だけローディング表示
+    await new Promise(resolve =>
+        setTimeout(resolve, 500)
+    );
+
     loading.classList.add("hidden");
 
     greeting.textContent =
-        greetings[Math.floor(Math.random()*greetings.length)];
+        greetings[
+            Math.floor(
+                Math.random()*greetings.length
+            )
+        ];
 
     fortuneText.textContent =
         currentFortune.fortune;
@@ -437,8 +471,12 @@ async function drawFortune(){
 
     fortune.classList.remove("hidden");
 
-}
+    // 毎回フェードイン
+    fortune.classList.remove("fade");
+    void fortune.offsetWidth;
+    fortune.classList.add("fade");
 
+}
 function showLetter(){
 
     fortune.classList.add("hidden");
@@ -450,6 +488,11 @@ function showLetter(){
         "— " + currentFortune.name;
 
     letter.classList.remove("hidden");
+
+    // 毎回フェードイン
+    letter.classList.remove("fade");
+    void letter.offsetWidth;
+    letter.classList.add("fade");
 
 }
 
@@ -463,11 +506,14 @@ function goHome(){
 
     home.classList.remove("hidden");
 
-}
+    // 毎回フェードイン
+    home.classList.remove("fade");
+    void home.offsetWidth;
+    home.classList.add("fade");
 
+}
 </script>
 
 </body>
 
 </html>
-
