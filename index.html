@@ -1,43 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>Ku's Good Luck Charm</title>
 
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+rel="stylesheet">
+
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
+
     margin:0;
-    background:#f8f4ed;
-    font-family:Arial,sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
     min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#F8F6F2;
+
+    font-family:
+        "Inter",
+        "Noto Sans JP",
+        sans-serif;
+
+    color:#333;
+
+    padding:24px;
+
 }
 
 .card{
-    width:90%;
-    max-width:420px;
+
+    width:min(100%,430px);
+
     background:white;
-    border-radius:20px;
-    padding:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,.1);
+
+    border-radius:24px;
+
+    padding:36px 28px;
+
+    box-shadow:
+    0 12px 40px rgba(0,0,0,.08);
+
+}
+
+.center{
+
     text-align:center;
+
+}
+
+.hidden{
+
+    display:none;
+
+}
+
+.fade{
+
+    animation:fade .35s ease;
+
+}
+
+@keyframes fade{
+
+from{
+
+    opacity:0;
+
+    transform:translateY(15px);
+
+}
+
+to{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+}
+
 }
 
 button{
-    padding:14px 28px;
+
+    width:100%;
+
+    padding:16px;
+
     border:none;
+
     border-radius:999px;
-    font-size:18px;
+
+    background:#4A6FA5;
+
+    color:white;
+
+    font-size:17px;
+
     cursor:pointer;
+
+    transition:.2s;
+
 }
 
-#result{
-    margin-top:25px;
-    text-align:left;
+button:hover{
+
+    transform:translateY(-2px);
+
 }
+
+button:active{
+
+    transform:scale(.98);
+
+}
+
+#letterButton{
+
+    background:white;
+
+    color:#4A6FA5;
+
+    border:2px solid #4A6FA5;
+
+}
+
+.small{
+
+    color:#777;
+
+    font-size:.9rem;
+
+}
+
+.section{
+
+    margin-top:24px;
+
+    padding-top:18px;
+
+    border-top:1px solid #ECECEC;
+
+}
+
+.loading{
+
+    text-align:center;
+
+    padding:32px 0;
+
+    color:#666;
+
+}
+
+.link{
+
+    display:block;
+
+    margin-top:24px;
+
+    text-align:center;
+
+    color:#4A6FA5;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
+
+#letterText{
+
+    white-space:pre-wrap;
+
+    line-height:1.8;
+
+}
+
 </style>
 
 </head>
@@ -46,46 +210,264 @@ button{
 
 <div class="card">
 
-<h1>🍀 Ku's Good Luck Charm</h1>
+    <!-- Home -->
 
-<p>May today bring you something wonderful.</p>
+    <div id="home" class="center fade">
 
-<button onclick="drawFortune()">
-Draw a Fortune
-</button>
+        <h1>🍀</h1>
 
-<div id="result"></div>
+        <h2>Ku's Good Luck Charm</h2>
+
+        <p class="small">
+            A little surprise for today.
+        </p>
+
+        <button onclick="drawFortune()">
+            Open Your Fortune
+        </button>
+
+    </div>
+
+
+    <!-- Loading -->
+
+    <div id="loading" class="hidden loading">
+
+        ✨
+
+        <br><br>
+
+        Finding today's fortune...
+
+        <br>
+
+        今日の運勢を探しています...
+
+    </div>
+
+
+    <!-- Fortune -->
+
+    <div id="fortune" class="hidden fade">
+
+        <h2 id="greeting"></h2>
+
+
+        <div class="section">
+
+            <h3>
+
+                Today's Fortune
+
+                <br>
+
+                <span class="small">
+
+                    今日の運勢
+
+                </span>
+
+            </h3>
+
+            <p id="fortuneText"></p>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3 id="bonusTitle"></h3>
+
+            <p id="bonusText"></p>
+
+        </div>
+
+
+        <div class="section center">
+
+            <button
+                id="letterButton"
+                onclick="showLetter()">
+
+                💌
+
+                <br><br>
+
+                A letter is waiting.
+
+                <br>
+
+                <span class="small">
+
+                    手紙が届いています。
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+        <!-- Letter -->
+
+    <div id="letter" class="hidden fade">
+
+        <h2>
+
+            💌 A Letter
+
+            <br>
+
+            <span class="small">
+
+                手紙
+
+            </span>
+
+        </h2>
+
+        <div class="section">
+
+            <p id="letterText"></p>
+
+            <p
+                id="sender"
+                style="
+                    text-align:right;
+                    font-weight:600;
+                    margin-top:20px;
+                ">
+            </p>
+
+        </div>
+
+        <a
+            class="link"
+            onclick="goHome()">
+
+            Open another fortune
+
+            <br>
+
+            もう一度ひく
+
+        </a>
+
+    </div>
 
 </div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyTXGD27EeamDLXpj-Su7c27RkSaRY4AjVoUFeap-bjQGca4dEqZnwBEltm6dVnGR8iWg/exec";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyTXGD27EeamDLXpj-Su7c27RkSaRY4AjVoUFeap-bjQGca4dEqZnwBEltm6dVnGR8iWg/exec";
+
+const greetings = [
+
+    "✨ Something good is waiting.",
+
+    "🌿 Today looks promising.",
+
+    "🍀 Trust today.",
+
+    "☀️ A beautiful day begins.",
+
+    "💫 A little luck goes a long way.",
+
+    "🌸 You've got this."
+
+];
+
+let currentFortune = null;
+
+function translate(title){
+
+    switch(title){
+
+        case "Today's Challenge":
+            return "今日のチャレンジ";
+
+        case "Today's Keyword":
+            return "今日のキーワード";
+
+        case "Watch Out!":
+            return "気をつけて";
+
+        default:
+            return "";
+
+    }
+
+}
 
 async function drawFortune(){
 
+    home.classList.add("hidden");
+
+    loading.classList.remove("hidden");
+
     const response = await fetch(API_URL);
+
     const data = await response.json();
 
-    const fortune = data[Math.floor(Math.random()*data.length)];
+    currentFortune =
+        data[Math.floor(Math.random()*data.length)];
 
-    document.getElementById("result").innerHTML = `
-        <h2>🌸 Great Blessing 🌸</h2>
+    loading.classList.add("hidden");
 
-        <h3>Today's Fortune</h3>
-        <p>${fortune.fortune}</p>
+    greeting.textContent =
+        greetings[Math.floor(Math.random()*greetings.length)];
 
-        <h3>${fortune.bonusTitle}</h3>
-        <p>${fortune.bonusText}</p>
+    fortuneText.textContent =
+        currentFortune.fortune;
 
-        <h3>A Letter for Later</h3>
-        <p>${fortune.letter}</p>
+    bonusTitle.innerHTML =
 
-        <p><strong>— ${fortune.name}</strong></p>
-    `;
+        currentFortune.bonusTitle +
+
+        "<br><span class='small'>" +
+
+        translate(currentFortune.bonusTitle) +
+
+        "</span>";
+
+    bonusText.textContent =
+        currentFortune.bonusText;
+
+    fortune.classList.remove("hidden");
+
+}
+
+function showLetter(){
+
+    fortune.classList.add("hidden");
+
+    letterText.textContent =
+        currentFortune.letter;
+
+    sender.textContent =
+        "— " + currentFortune.name;
+
+    letter.classList.remove("hidden");
+
+}
+
+function goHome(){
+
+    letter.classList.add("hidden");
+
+    fortune.classList.add("hidden");
+
+    loading.classList.add("hidden");
+
+    home.classList.remove("hidden");
+
 }
 
 </script>
 
 </body>
+
 </html>
+
