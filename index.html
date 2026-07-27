@@ -439,9 +439,9 @@ async function drawFortune(){
     currentFortune =
         data[Math.floor(Math.random()*data.length)];
 
-    // 0.5秒だけローディング表示
+    // 0.2秒だけローディング表示
     await new Promise(resolve =>
-        setTimeout(resolve, 500)
+        setTimeout(resolve, 200)
     );
 
     loading.classList.add("hidden");
