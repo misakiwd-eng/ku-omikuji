@@ -427,6 +427,7 @@ const greetings = [
 ];
 
 let currentFortune = null;
+let previousIndex = -1;
 
 function translate(title){
 
@@ -481,9 +482,22 @@ async function drawFortune(){
             throw new Error("No data found.");
         }
 
-        currentFortune =
-            data[Math.floor(Math.random() * data.length)];
+        let randomIndex;
 
+do{
+
+    randomIndex =
+        Math.floor(Math.random() * data.length);
+
+}while(
+    data.length > 1 &&
+    randomIndex === previousIndex
+);
+
+previousIndex = randomIndex;
+
+currentFortune = data[randomIndex];
+        
         await new Promise(resolve =>
             setTimeout(resolve, 300)
         );
